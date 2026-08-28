@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomba TV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff4d4d, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .live-badge {
+            background: #ff2a2a;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-badge::before {
+            content: "●";
+            font-size: 18px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 42, 42, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0); }
+        }
+
+        .player-wrapper {
+            background: #111118;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .player-wrapper video {
+            width: 100%;
+            display: block;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #1e1e2a;
+            border: none;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #2e2e40;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #ff4d4d;
+        }
+
+        .btn-primary:hover {
+            background: #ff1a1a;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #4a4a5a;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header class="header">
+        <div class="logo">📺 Bomba TV</div>
+        <div class="live-badge">ПРЯМОЙ ЭФИР</div>
+    </header>
+
+    <div class="player-wrapper">
+        <video controls autoplay muted playsinline>
+            <!-- ВСТАВЬ СЮДА ССЫЛКУ НА ТВОЁ ВИДЕО -->
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Твой браузер не поддерживает видео.
+        </video>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-primary" onclick="alert('🔗 Ссылка скопирована!')">
+            📋 Поделиться
+        </button>
+        <button class="btn" onclick="document.querySelector('video').requestFullscreen()">
+            ⛶ На весь экран
+        </button>
+        <button class="btn" id="copyLinkBtn">
+            🔗 Копировать ссылку
+        </button>
+    </div>
+
+    <footer class="footer">
+        © 2026 Bomba TV
+    </footer>
+</div>
+
+<script>
+    document.getElementById('copyLinkBtn').addEventListener('click', function() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('✅ Ссылка скопирована: ' + url);
+        }).catch(() => {
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            alert('✅ Ссылка скопирована: ' + url);
+        });
+    });
+</script>
+
+</body>
+</html>
