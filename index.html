@@ -86,12 +86,11 @@
             position: relative;
         }
 
-        .player-wrapper video {
+        .player-wrapper iframe {
             width: 100%;
             display: block;
-            background: #000;
             aspect-ratio: 16 / 9;
-            object-fit: cover;
+            border: none;
         }
 
         .actions {
@@ -164,18 +163,24 @@
     </header>
 
     <div class="player-wrapper">
-        <video controls autoplay muted playsinline>
-            <!-- ВСТАВЬ СЮДА ССЫЛКУ НА ТВОЁ ВИДЕО -->
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            Твой браузер не поддерживает видео.
-        </video>
+        <!-- ВСТАВЬ СЮДА ССЫЛКУ НА ТВОЁ ВИДЕО С YOUTUBE -->
+        <!-- 
+            Как получить ID видео:
+            - Обычное видео: https://www.youtube.com/watch?v=XXXXXX  -> ID = XXXXXX
+            - Трансляция: https://www.youtube.com/watch?v=XXXXXX   -> ID = XXXXXX
+            - Вставь ID вместо слова "ID_ВИДЕО" в ссылке ниже
+        -->
+        <iframe 
+            src="https://www.youtube.com/embed/ID_ВИДЕО?autoplay=1&mute=1" 
+            allowfullscreen>
+        </iframe>
     </div>
 
     <div class="actions">
         <button class="btn btn-primary" onclick="alert('🔗 Ссылка скопирована!')">
             📋 Поделиться
         </button>
-        <button class="btn" onclick="document.querySelector('video').requestFullscreen()">
+        <button class="btn" onclick="document.querySelector('iframe').requestFullscreen()">
             ⛶ На весь экран
         </button>
         <button class="btn" id="copyLinkBtn">
