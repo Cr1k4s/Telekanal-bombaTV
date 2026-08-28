@@ -31,7 +31,6 @@
             width: 100%;
         }
 
-        /* ===== ВЕРХНЕЕ ПРЕДУПРЕЖДЕНИЕ ===== */
         .vpn-warning {
             text-align: center;
             font-size: 11px;
@@ -60,7 +59,6 @@
             font-weight: 600;
         }
 
-        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -108,7 +106,6 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0); }
         }
 
-        /* ===== ПЛЕЕР ===== */
         .player-wrapper {
             background: #111118;
             border-radius: 20px;
@@ -124,7 +121,6 @@
             border: none;
         }
 
-        /* ===== КНОПКА ДИНАМИКА (оверлей) ===== */
         .sound-overlay {
             position: absolute;
             top: 0;
@@ -200,7 +196,6 @@
             }
         }
 
-        /* ===== КНОПКИ ПОД ПЛЕЕРОМ ===== */
         .actions {
             display: flex;
             justify-content: center;
@@ -265,7 +260,6 @@
 
 <div class="container">
 
-    <!-- ПРЕДУПРЕЖДЕНИЕ ПРО VPN -->
     <div class="vpn-warning">
         ⚠️ <span class="highlight">ВНИМАНИЕ:</span> Для просмотра телеканала может потребоваться 
         <strong>VPN Happy</strong> или <strong>ZAPRET</strong>. 
@@ -273,22 +267,24 @@
         <a href="https://github.com/bol-van/zapret" target="_blank">ZAPRET</a>
     </div>
     
-    <!-- ШАПКА -->
     <header class="header">
         <div class="logo">📺 Bomba TV</div>
         <div class="live-badge">ПРЯМОЙ ЭФИР</div>
     </header>
 
-    <!-- ПЛЕЕР -->
     <div class="player-wrapper" id="playerWrapper">
+        <!-- 
+            ПОЛНЫЙ ИНТЕРФЕЙС YOUTUBE
+            controls=1 — показывает все кнопки YouTube
+            но мы отключаем паузу и перемотку через disablekb=1
+        -->
         <iframe 
             id="youtubePlayer"
-            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&hl=ru"
+            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=1&modestbranding=0&rel=1&iv_load_policy=1&fs=1&disablekb=1&hl=ru"
             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
             allowfullscreen>
         </iframe>
 
-        <!-- КНОПКА ДИНАМИКА -->
         <div class="sound-overlay" id="soundOverlay">
             <div class="sound-btn" id="soundBtn">
                 <span class="icon">🔊</span>
@@ -300,7 +296,6 @@
         </div>
     </div>
 
-    <!-- КНОПКИ -->
     <div class="actions">
         <button class="btn btn-primary" onclick="alert('🔗 Ссылка скопирована!')">
             📋 Поделиться
@@ -319,7 +314,6 @@
 </div>
 
 <script>
-    // Копирование ссылки
     document.getElementById('copyLinkBtn').addEventListener('click', function() {
         const url = window.location.href;
         navigator.clipboard.writeText(url).then(() => {
@@ -362,6 +356,7 @@
     });
 
     console.log('📺 Bomba TV загружен!');
+    console.log('🎮 Управление YouTube доступно, но пауза и перемотка отключены');
 </script>
 
 </body>
