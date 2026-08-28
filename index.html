@@ -18,7 +18,7 @@
             font-family: 'Inter', sans-serif;
             background: #0a0a0f;
             color: #fff;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -121,7 +121,7 @@
             border: none;
         }
 
-        /* ===== КНОПКА ДИНАМИКА ===== */
+        /* КНОПКА ДИНАМИКА */
         .sound-overlay {
             position: absolute;
             top: 0;
@@ -196,13 +196,80 @@
                 font-size: 12px;
             }
         }
-        /* ===== КОНЕЦ КНОПКИ ДИНАМИКА ===== */
+
+        /* ===== ПАНЕЛЬ УПРАВЛЕНИЯ КАЧЕСТВОМ ===== */
+        .controls-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quality-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #1a1a28;
+            padding: 6px 16px 6px 20px;
+            border-radius: 50px;
+            border: 1px solid #2a2a3a;
+        }
+
+        .quality-selector label {
+            font-size: 13px;
+            color: #8a8a9a;
+            font-weight: 500;
+        }
+
+        .quality-selector select {
+            background: #0a0a0f;
+            color: #fff;
+            border: 1px solid #2a2a3a;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .quality-selector select:hover {
+            border-color: #ff4d4d;
+        }
+
+        .quality-selector select option {
+            background: #1a1a28;
+            color: #fff;
+        }
+
+        .controls-bar .btn-small {
+            background: #1e1e2a;
+            border: none;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .controls-bar .btn-small:hover {
+            background: #2e2e40;
+        }
+        /* ===== КОНЕЦ ПАНЕЛИ ===== */
 
         .actions {
             display: flex;
             justify-content: center;
             gap: 16px;
-            margin-top: 24px;
+            margin-top: 16px;
             flex-wrap: wrap;
         }
 
@@ -247,6 +314,13 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .quality-selector {
+                justify-content: center;
+            }
             .actions {
                 flex-direction: column;
                 width: 100%;
@@ -283,7 +357,7 @@
             allowfullscreen>
         </iframe>
 
-        <!-- КНОПКА ДИНАМИКА (появляется поверх плеера) -->
+        <!-- КНОПКА ДИНАМИКА -->
         <div class="sound-overlay" id="soundOverlay">
             <div class="sound-btn" id="soundBtn">
                 <span class="icon">🔊</span>
@@ -295,12 +369,26 @@
         </div>
     </div>
 
+    <!-- ===== ПАНЕЛЬ УПРАВЛЕНИЯ КАЧЕСТВОМ ===== -->
+    <div class="controls-bar">
+        <div class="quality-selector">
+            <label>📺 Качество:</label>
+            <select id="qualitySelect">
+                <option value="hd1080">1080p</option>
+                <option value="hd720">720p</option>
+                <option value="hd480">480p</option>
+                <option value="hd360">360p</option>
+                <option value="hd240">240p</option>
+                <option value="hd144">144p</option>
+            </select>
+        </div>
+        <button class="btn-small" onclick="applyQuality()">Применить</button>
+        <button class="btn-small" onclick="document.querySelector('iframe').requestFullscreen()">⛶ На весь экран</button>
+    </div>
+
     <div class="actions">
         <button class="btn btn-primary" onclick="alert('🔗 Ссылка скопирована!')">
             📋 Поделиться
-        </button>
-        <button class="btn" onclick="document.querySelector('iframe').requestFullscreen()">
-            ⛶ На весь экран
         </button>
         <button class="btn" id="copyLinkBtn">
             🔗 Копировать ссылку
@@ -331,46 +419,107 @@
 
     // ===== КНОПКА ДИНАМИКА =====
     const overlay = document.getElementById('soundOverlay');
-    const playerWrapper = document.getElementById('playerWrapper');
     const iframe = document.getElementById('youtubePlayer');
 
     function enableSound() {
-        // Скрываем оверлей
         overlay.classList.add('hidden');
-        
-        // Перезагружаем iframe со звуком (убираем mute=1)
         const currentSrc = iframe.src;
-        // Если в ссылке есть mute=1, убираем его
         let newSrc = currentSrc.replace('&mute=1', '').replace('?mute=1', '?');
-        // Если не было mute, просто оставляем как есть
         if (newSrc === currentSrc) {
-            // Добавляем параметр, чтобы перезагрузить плеер со звуком
             newSrc = currentSrc + '&mute=0';
         }
         iframe.src = newSrc;
     }
 
-    // Клик по оверлею или по кнопке
     overlay.addEventListener('click', enableSound);
     document.getElementById('soundBtn').addEventListener('click', function(e) {
-        e.stopPropagation(); // Чтобы не сработало дважды
+        e.stopPropagation();
         enableSound();
     });
 
-    // Если пользователь нажал на саму страницу (не на оверлей) — тоже включаем звук
     document.addEventListener('click', function(e) {
-        // Если оверлей ещё виден и клик был не по нему (например, по фону)
-        if (!overlay.classList.contains('hidden')) {
-            // Проверяем, что клик не внутри оверлея (чтобы не сработало дважды)
-            if (!overlay.contains(e.target)) {
-                enableSound();
-            }
+        if (!overlay.classList.contains('hidden') && !overlay.contains(e.target)) {
+            enableSound();
         }
     });
 
-    // Дополнительно: если видео уже играет, но звук выключен, 
-    // то клик по видео тоже включит звук (через оверлей)
-    console.log('🔊 Нажмите на экран, чтобы включить звук!');
+    // ===== ПЕРЕКЛЮЧЕНИЕ КАЧЕСТВА =====
+    const videoID = 'Cp7rTJT0nR8';
+
+    function applyQuality() {
+        const quality = document.getElementById('qualitySelect').value;
+        // Сохраняем текущее состояние звука
+        const currentSrc = iframe.src;
+        const hasMute = currentSrc.includes('mute=1');
+        const hasAutoplay = currentSrc.includes('autoplay=1');
+        
+        // Собираем новую ссылку
+        let newSrc = `https://www.youtube.com/embed/${videoID}?`;
+        newSrc += `autoplay=1&`;
+        newSrc += `controls=0&`;
+        newSrc += `modestbranding=1&`;
+        newSrc += `rel=0&`;
+        newSrc += `iv_load_policy=3&`;
+        newSrc += `fs=0&`;
+        newSrc += `disablekb=1&`;
+        newSrc += `hl=ru&`;
+        newSrc += `cc_lang_pref=ru&`;
+        newSrc += `vq=${quality}`;
+        
+        if (hasMute) {
+            newSrc += `&mute=1`;
+        }
+        
+        iframe.src = newSrc;
+        
+        // Показываем уведомление
+        const qualityNames = {
+            'hd1080': '1080p',
+            'hd720': '720p',
+            'hd480': '480p',
+            'hd360': '360p',
+            'hd240': '240p',
+            'hd144': '144p'
+        };
+        showToast(`Качество изменено на ${qualityNames[quality]}`);
+    }
+
+    // ===== TOAST-УВЕДОМЛЕНИЕ =====
+    function showToast(message) {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '30px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(20, 20, 30, 0.9)',
+            backdropFilter: 'blur(10px)',
+            color: '#fff',
+            padding: '12px 28px',
+            borderRadius: '50px',
+            fontSize: '15px',
+            fontWeight: '600',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+            zIndex: '9999',
+            transition: 'opacity 0.3s ease',
+            opacity: '1'
+        });
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
+    // Подсказка при загрузке
+    console.log('📺 Bomba TV загружен! Используй выпадающий список для смены качества.');
 </script>
 
 </body>
