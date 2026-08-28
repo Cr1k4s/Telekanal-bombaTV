@@ -31,7 +31,6 @@
             width: 100%;
         }
 
-        /* Верхнее предупреждение про VPN и ZAPRET */
         .vpn-warning {
             text-align: center;
             font-size: 11px;
@@ -122,6 +121,83 @@
             border: none;
         }
 
+        /* ===== КНОПКА ДИНАМИКА ===== */
+        .sound-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: opacity 0.5s ease;
+            z-index: 10;
+            border-radius: 20px;
+        }
+
+        .sound-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sound-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 60px;
+            padding: 20px 40px;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .sound-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+            border-color: #ff4d4d;
+        }
+
+        .sound-btn .icon {
+            font-size: 38px;
+        }
+
+        .sound-btn .text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.3;
+        }
+
+        .sound-btn .text small {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .sound-btn {
+                padding: 14px 24px;
+                font-size: 18px;
+                gap: 12px;
+            }
+            .sound-btn .icon {
+                font-size: 28px;
+            }
+            .sound-btn .text small {
+                font-size: 12px;
+            }
+        }
+        /* ===== КОНЕЦ КНОПКИ ДИНАМИКА ===== */
+
         .actions {
             display: flex;
             justify-content: center;
@@ -186,7 +262,6 @@
 
 <div class="container">
 
-    <!-- ПРЕДУПРЕЖДЕНИЕ ПРО VPN Happy И ZAPRET -->
     <div class="vpn-warning">
         ⚠️ <span class="highlight">ВНИМАНИЕ:</span> Для просмотра телеканала может потребоваться 
         <strong>VPN Happy</strong> или <strong>ZAPRET</strong>. 
@@ -199,18 +274,25 @@
         <div class="live-badge">ПРЯМОЙ ЭФИР</div>
     </header>
 
-    <div class="player-wrapper">
-        <!-- ВСТАВЬ СЮДА ССЫЛКУ НА ТВОЁ ВИДЕО С YOUTUBE -->
-        <!-- 
-            Как получить ID видео:
-            - Обычное видео: https://www.youtube.com/watch?v=XXXXXX  -> ID = XXXXXX
-            - Трансляция: https://www.youtube.com/watch?v=XXXXXX   -> ID = XXXXXX
-            - Вставь ID вместо слова "ID_ВИДЕО" в ссылке ниже
-        -->
+    <div class="player-wrapper" id="playerWrapper">
+        <!-- YouTube плеер -->
         <iframe 
-            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&mute=1" 
+            id="youtubePlayer"
+            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&hl=ru&cc_lang_pref=ru&vq=hd1080"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
             allowfullscreen>
         </iframe>
+
+        <!-- КНОПКА ДИНАМИКА (появляется поверх плеера) -->
+        <div class="sound-overlay" id="soundOverlay">
+            <div class="sound-btn" id="soundBtn">
+                <span class="icon">🔊</span>
+                <span class="text">
+                    Нажмите для звука
+                    <small>Нажмите в любое место, чтобы включить звук</small>
+                </span>
+            </div>
+        </div>
     </div>
 
     <div class="actions">
@@ -231,6 +313,7 @@
 </div>
 
 <script>
+    // Копирование ссылки
     document.getElementById('copyLinkBtn').addEventListener('click', function() {
         const url = window.location.href;
         navigator.clipboard.writeText(url).then(() => {
@@ -245,6 +328,49 @@
             alert('✅ Ссылка скопирована: ' + url);
         });
     });
+
+    // ===== КНОПКА ДИНАМИКА =====
+    const overlay = document.getElementById('soundOverlay');
+    const playerWrapper = document.getElementById('playerWrapper');
+    const iframe = document.getElementById('youtubePlayer');
+
+    function enableSound() {
+        // Скрываем оверлей
+        overlay.classList.add('hidden');
+        
+        // Перезагружаем iframe со звуком (убираем mute=1)
+        const currentSrc = iframe.src;
+        // Если в ссылке есть mute=1, убираем его
+        let newSrc = currentSrc.replace('&mute=1', '').replace('?mute=1', '?');
+        // Если не было mute, просто оставляем как есть
+        if (newSrc === currentSrc) {
+            // Добавляем параметр, чтобы перезагрузить плеер со звуком
+            newSrc = currentSrc + '&mute=0';
+        }
+        iframe.src = newSrc;
+    }
+
+    // Клик по оверлею или по кнопке
+    overlay.addEventListener('click', enableSound);
+    document.getElementById('soundBtn').addEventListener('click', function(e) {
+        e.stopPropagation(); // Чтобы не сработало дважды
+        enableSound();
+    });
+
+    // Если пользователь нажал на саму страницу (не на оверлей) — тоже включаем звук
+    document.addEventListener('click', function(e) {
+        // Если оверлей ещё виден и клик был не по нему (например, по фону)
+        if (!overlay.classList.contains('hidden')) {
+            // Проверяем, что клик не внутри оверлея (чтобы не сработало дважды)
+            if (!overlay.contains(e.target)) {
+                enableSound();
+            }
+        }
+    });
+
+    // Дополнительно: если видео уже играет, но звук выключен, 
+    // то клик по видео тоже включит звук (через оверлей)
+    console.log('🔊 Нажмите на экран, чтобы включить звук!');
 </script>
 
 </body>
