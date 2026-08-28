@@ -18,7 +18,7 @@
             font-family: 'Inter', sans-serif;
             background: #0a0a0f;
             color: #fff;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -31,6 +31,7 @@
             width: 100%;
         }
 
+        /* ===== ВЕРХНЕЕ ПРЕДУПРЕЖДЕНИЕ ===== */
         .vpn-warning {
             text-align: center;
             font-size: 11px;
@@ -59,6 +60,7 @@
             font-weight: 600;
         }
 
+        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -106,6 +108,7 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0); }
         }
 
+        /* ===== ПЛЕЕР ===== */
         .player-wrapper {
             background: #111118;
             border-radius: 20px;
@@ -121,7 +124,7 @@
             border: none;
         }
 
-        /* КНОПКА ДИНАМИКА */
+        /* ===== КНОПКА ДИНАМИКА (оверлей) ===== */
         .sound-overlay {
             position: absolute;
             top: 0;
@@ -197,92 +200,12 @@
             }
         }
 
-        /* ===== ПАНЕЛЬ УПРАВЛЕНИЯ ===== */
-        .controls-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #1a1a28;
-            padding: 6px 16px 6px 20px;
-            border-radius: 50px;
-            border: 1px solid #2a2a3a;
-        }
-
-        .control-group label {
-            font-size: 13px;
-            color: #8a8a9a;
-            font-weight: 500;
-        }
-
-        .control-group select {
-            background: #0a0a0f;
-            color: #fff;
-            border: 1px solid #2a2a3a;
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .control-group select:hover {
-            border-color: #ff4d4d;
-        }
-
-        .control-group select option {
-            background: #1a1a28;
-            color: #fff;
-        }
-
-        .btn-control {
-            background: #1e1e2a;
-            border: none;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.25s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .btn-control:hover {
-            background: #2e2e40;
-        }
-
-        .btn-control.active {
-            background: #ff4d4d;
-            border-color: #ff4d4d;
-        }
-
-        .btn-control.active:hover {
-            background: #ff1a1a;
-        }
-
-        .btn-control .icon {
-            font-size: 16px;
-        }
-
+        /* ===== КНОПКИ ПОД ПЛЕЕРОМ ===== */
         .actions {
             display: flex;
             justify-content: center;
             gap: 16px;
-            margin-top: 16px;
+            margin-top: 24px;
             flex-wrap: wrap;
         }
 
@@ -327,13 +250,6 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .controls-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .control-group {
-                justify-content: center;
-            }
             .actions {
                 flex-direction: column;
                 width: 100%;
@@ -349,6 +265,7 @@
 
 <div class="container">
 
+    <!-- ПРЕДУПРЕЖДЕНИЕ ПРО VPN -->
     <div class="vpn-warning">
         ⚠️ <span class="highlight">ВНИМАНИЕ:</span> Для просмотра телеканала может потребоваться 
         <strong>VPN Happy</strong> или <strong>ZAPRET</strong>. 
@@ -356,16 +273,17 @@
         <a href="https://github.com/bol-van/zapret" target="_blank">ZAPRET</a>
     </div>
     
+    <!-- ШАПКА -->
     <header class="header">
         <div class="logo">📺 Bomba TV</div>
         <div class="live-badge">ПРЯМОЙ ЭФИР</div>
     </header>
 
+    <!-- ПЛЕЕР -->
     <div class="player-wrapper" id="playerWrapper">
-        <!-- YouTube плеер -->
         <iframe 
             id="youtubePlayer"
-            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&hl=ru&cc_lang_pref=ru&vq=hd1080"
+            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&fs=0&disablekb=1&hl=ru"
             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
             allowfullscreen>
         </iframe>
@@ -382,31 +300,13 @@
         </div>
     </div>
 
-    <!-- ===== ПАНЕЛЬ УПРАВЛЕНИЯ ===== -->
-    <div class="controls-bar">
-        <div class="control-group">
-            <label>📺 Качество:</label>
-            <select id="qualitySelect">
-                <option value="hd1080">1080p</option>
-                <option value="hd720">720p</option>
-                <option value="hd480">480p</option>
-                <option value="hd360">360p</option>
-                <option value="hd240">240p</option>
-                <option value="hd144">144p</option>
-            </select>
-        </div>
-        
-        <button class="btn-control" id="subtitlesBtn" onclick="toggleSubtitles()">
-            <span class="icon">📝</span> Субтитры: <span id="subStatus">Вкл</span>
-        </button>
-        
-        <button class="btn-control" onclick="applyQuality()">Применить</button>
-        <button class="btn-control" onclick="document.querySelector('iframe').requestFullscreen()">⛶ На весь экран</button>
-    </div>
-
+    <!-- КНОПКИ -->
     <div class="actions">
         <button class="btn btn-primary" onclick="alert('🔗 Ссылка скопирована!')">
             📋 Поделиться
+        </button>
+        <button class="btn" onclick="document.querySelector('iframe').requestFullscreen()">
+            ⛶ На весь экран
         </button>
         <button class="btn" id="copyLinkBtn">
             🔗 Копировать ссылку
@@ -461,142 +361,7 @@
         }
     });
 
-    // ===== СОСТОЯНИЯ =====
-    const videoID = 'Cp7rTJT0nR8';
-    let subtitlesOn = true;
-
-    // ===== ПЕРЕКЛЮЧЕНИЕ СУБТИТРОВ =====
-    function toggleSubtitles() {
-        subtitlesOn = !subtitlesOn;
-        const statusSpan = document.getElementById('subStatus');
-        const btn = document.getElementById('subtitlesBtn');
-        
-        if (subtitlesOn) {
-            statusSpan.textContent = 'Вкл';
-            btn.classList.remove('active');
-            showToast('📝 Субтитры включены');
-        } else {
-            statusSpan.textContent = 'Выкл';
-            btn.classList.add('active');
-            showToast('📝 Субтитры выключены');
-        }
-        
-        // Перезагружаем плеер с новым параметром
-        applyQuality();
-    }
-
-    // ===== ПРИМЕНЕНИЕ КАЧЕСТВА С СОХРАНЕНИЕМ ВРЕМЕНИ =====
-    function applyQuality() {
-        const quality = document.getElementById('qualitySelect').value;
-        const currentSrc = iframe.src;
-        
-        // Определяем, есть ли звук (mute)
-        const hasMute = currentSrc.includes('mute=1');
-        
-        // Собираем базовые параметры
-        let newSrc = `https://www.youtube.com/embed/${videoID}?`;
-        newSrc += `autoplay=1&`;
-        newSrc += `controls=0&`;
-        newSrc += `modestbranding=1&`;
-        newSrc += `rel=0&`;
-        newSrc += `iv_load_policy=3&`;
-        newSrc += `fs=0&`;
-        newSrc += `disablekb=1&`;
-        newSrc += `hl=ru&`;
-        newSrc += `vq=${quality}`;
-        
-        // Субтитры
-        if (subtitlesOn) {
-            newSrc += `&cc_lang_pref=ru`;
-        }
-        
-        if (hasMute) {
-            newSrc += `&mute=1`;
-        }
-        
-        // СОХРАНЯЕМ ВРЕМЯ
-        // Получаем текущее время через параметр start
-        const startMatch = currentSrc.match(/[?&]start=(\d+)/);
-        let currentTime = 0;
-        if (startMatch) {
-            currentTime = parseInt(startMatch[1]);
-        }
-        
-        // Если есть время, добавляем его в новую ссылку
-        if (currentTime > 0) {
-            newSrc += `&start=${currentTime}`;
-        }
-        
-        iframe.src = newSrc;
-        
-        const qualityNames = {
-            'hd1080': '1080p',
-            'hd720': '720p',
-            'hd480': '480p',
-            'hd360': '360p',
-            'hd240': '240p',
-            'hd144': '144p'
-        };
-        showToast(`Качество изменено на ${qualityNames[quality]}`);
-    }
-
-    // ===== TOAST-УВЕДОМЛЕНИЕ =====
-    function showToast(message) {
-        const existing = document.querySelector('.toast');
-        if (existing) existing.remove();
-        
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        Object.assign(toast.style, {
-            position: 'fixed',
-            bottom: '30px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'rgba(20, 20, 30, 0.9)',
-            backdropFilter: 'blur(10px)',
-            color: '#fff',
-            padding: '12px 28px',
-            borderRadius: '50px',
-            fontSize: '15px',
-            fontWeight: '600',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
-            zIndex: '9999',
-            transition: 'opacity 0.3s ease',
-            opacity: '1'
-        });
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => toast.remove(), 300);
-        }, 2000);
-    }
-
-    // ===== АВТОСОХРАНЕНИЕ ВРЕМЕНИ =====
-    // Каждые 5 секунд сохраняем текущее время через параметр start
-    // Это позволяет при перезагрузке страницы продолжить с того же места
-    setInterval(() => {
-        try {
-            // Получаем текущее время из iframe (работает только если плеер загружен)
-            // Просто обновляем параметр start в src
-            const currentSrc = iframe.src;
-            if (currentSrc.includes('youtube.com')) {
-                // Проверяем, есть ли уже start
-                const hasStart = currentSrc.includes('&start=') || currentSrc.includes('?start=');
-                // Мы не можем получить точное время из iframe, поэтому просто сохраняем
-                // эту функцию можно расширить с YouTube API
-            }
-        } catch(e) {
-            // Игнорируем ошибки
-        }
-    }, 5000);
-
-    // Подсказка при загрузке
     console.log('📺 Bomba TV загружен!');
-    console.log('📝 Субтитры: Вкл (нажми кнопку чтобы выключить)');
-    console.log('🎥 Качество можно менять без перемотки в начало');
 </script>
 
 </body>
