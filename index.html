@@ -274,13 +274,13 @@
 
     <div class="player-wrapper" id="playerWrapper">
         <!-- 
-            ПОЛНЫЙ ИНТЕРФЕЙС YOUTUBE
-            controls=1 — показывает все кнопки YouTube
-            но мы отключаем паузу и перемотку через disablekb=1
+            ПЛЕЙЛИСТ С ЗАЦИКЛИВАНИЕМ
+            loop=1 — включает повтор
+            playlist=PLRaLcLi6EjQM — ID плейлиста (нужен для зацикливания)
         -->
         <iframe 
             id="youtubePlayer"
-            src="https://www.youtube.com/embed/Cp7rTJT0nR8?autoplay=1&controls=1&modestbranding=0&rel=1&iv_load_policy=1&fs=1&disablekb=1&hl=ru"
+            src="https://www.youtube.com/embed?listType=playlist&list=PLRaLcLi6EjQM&autoplay=1&controls=1&modestbranding=0&rel=1&iv_load_policy=1&fs=1&disablekb=1&hl=ru&loop=1&playlist=PLRaLcLi6EjQM"
             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
             allowfullscreen>
         </iframe>
@@ -356,7 +356,7 @@
     });
 
     console.log('📺 Bomba TV загружен!');
-    console.log('🎮 Управление YouTube доступно, но пауза и перемотка отключены');
+    console.log('🔄 Плейлист зациклен, видео будут идти бесконечно!');
 </script>
 
 </body>
